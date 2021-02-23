@@ -1,4 +1,4 @@
-package new_type
+package new_type.intersection_types
 
 trait Resettable:
   def reset(): Unit

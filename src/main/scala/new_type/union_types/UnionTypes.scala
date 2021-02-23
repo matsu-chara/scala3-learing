@@ -1,4 +1,4 @@
-package new_type
+package new_type.union_types
 
 case class UserName(name: String)
 case class Password(hash: String)
