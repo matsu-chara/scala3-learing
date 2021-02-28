@@ -69,3 +69,4 @@ object PostConditions:
 def check =
   import PostConditions.{ensuring, result}
   val s = List(1, 2, 3).sum.ensuring(result == 6)
+  // ...ensuring($x ?=> result(using $x) == 6)
