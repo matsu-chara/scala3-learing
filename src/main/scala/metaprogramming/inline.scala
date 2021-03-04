@@ -73,3 +73,27 @@ object C:
       case _: Boolean => Some(false)
       case _: Unit    => Some(())
       case _          => None
+
+object Ops:
+  import scala.compiletime.ops.int.*
+  import scala.compiletime.ops.boolean.*
+
+  val conjunction: true && true = true
+  val multiplication: 3 * 5 = 15
+
+  import scala.compiletime.ops.*
+
+  type +[X <: Int | String, Y <: Int | String] = (X, Y) match
+    case (Int, Int) => int.+[X, Y]
+    case (String, String) => string.+[X, Y]
+
+  val concat: "a" + "b" = "ab"
+  val addition: 1 + 1 = 2
+
+  import scala.compiletime.summonFrom
+  import scala.collection.immutable.{HashSet, TreeSet}
+
+  inline def setFor[T]: Set[T] = summonFrom {
+    case ord: Ordering[T] => new TreeSet[T]()(using ord)
+    case _                => new HashSet[T]
+  }
