@@ -97,3 +97,6 @@ object Ops:
     case ord: Ordering[T] => new TreeSet[T]()(using ord)
     case _                => new HashSet[T]
   }
+
+  val x: (1, 3) = (1, 3)
+  val y: scala.compiletime.Widen[x.type] = x
