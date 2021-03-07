@@ -1,6 +1,6 @@
 package metaprogramming
 
-import scala.quoted.{Expr,Quotes, Type}
+import scala.quoted.{Expr, Exprs, Quotes, Type, Varargs}
 
 object Macros:
   inline def assert(inline expr: Boolean): Unit =
@@ -65,3 +65,41 @@ object Macros:
     }
   
   inline def sum_m(arr: Array[Int]): Int = ${sum('arr)}
+
+  inline def sum2(inline args: Int*): Int = ${ sumExpr('args) }
+
+  private def sumExpr(argsExpr: Expr[Seq[Int]])(using Quotes): Expr[Int] =
+    argsExpr match
+      case Varargs(_ @ Exprs(argValues)) =>
+        Expr(argValues.sum) // expressionとして拾えるならコンパイル時にsumする
+      case Varargs(argExprs) =>
+        val staticSum: Int = argExprs.map(_.value.getOrElse(0)).sum
+        val dynamicSum: Seq[Expr[Int]] = argExprs.filter(_.value.isEmpty)
+        dynamicSum.foldLeft(Expr(staticSum))((acc, arg) => '{ $acc + $arg })
+      case _ =>
+        '{ $argsExpr.sum }
+  
+  // optimize {
+  //   sum(sum(1, a, 2), 3, b)
+  //}
+  // が6 + a + bに最適化されるquotted patterns
+  def sum3(args: Int*): Int = args.sum
+
+  inline def optimize(inline arg: Int): Int = ${ optimizeExpr('arg) }
+
+  private def optimizeExpr(body: Expr[Int])(using Quotes): Expr[Int] =
+    body match
+      case '{ sum3() } => Expr(0)
+      case '{ sum3($n) } => n
+      case '{ sum3(${Varargs(args)}: _*) } => sumExpr(args)
+      case body => body
+  
+  private def sumExpr(args1: Seq[Expr[Int]])(using Quotes): Expr[Int] =
+    def flatSumArgs(arg: Expr[Int]): Seq[Expr[Int]] = arg match
+      case '{ sum3(${Varargs(subArgs)}: _*) } => subArgs.flatMap(flatSumArgs)
+      case arg => Seq(arg)
+
+    val args2 = args1.flatMap(flatSumArgs)
+    val staticSum: Int = args2.map(_.value.getOrElse(0)).sum
+    val dynamicSum: Seq[Expr[Int]] = args2.filter(_.value.isEmpty)
+    dynamicSum.foldLeft(Expr(staticSum))((acc, arg) => '{ $acc + $arg })
