@@ -7,7 +7,8 @@ trait Monoid[T] extends SemiGroup[T]:
   def unit: T
 
 given Monoid[String] with
-  extension (x: String) def combine (y: String): String = x.concat(y)
+  extension (x: String) def combine (y: String): String = x ++ y
+  
   def unit: String = ""
 
 given Monoid[Int] with

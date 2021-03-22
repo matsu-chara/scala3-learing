@@ -19,5 +19,5 @@ trait B:
 trait C extends A,B:
   def children: List[A&B] = List.empty[A&B]
   
-val x: A & B = null
+val x: A & B = ???
 val ys: List[A & B] = x.children
