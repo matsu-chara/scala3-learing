@@ -28,8 +28,8 @@ object Macros:
     case Let(x: String, e: Exp, in: Exp)
 
   import Exp.*
-  val exp = Plus(Plus(Num(2), Var("x")), Num(4))
-  val letExp = Let("x", Num(3), exp)
+  val exp = Plus(Plus(Num(2), Var("x")), Num(4)): @unchecked
+  val letExp = Let("x", Num(3), exp): @unchecked
 
 
   def compile(e: Exp, env: Map[String, Expr[Int]])(using Quotes): Expr[Int] =

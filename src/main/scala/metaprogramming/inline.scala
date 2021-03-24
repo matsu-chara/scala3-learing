@@ -48,7 +48,9 @@ object B:
 
 
 object C:
-  import scala.compiletime.{constValue, S}
+  import scala.compiletime.ops.int.S
+  import scala.compiletime.constValue
+
 
   transparent inline def toIntC[N]: Int =
     inline constValue[N] match
@@ -75,8 +77,8 @@ object C:
       case _          => None
 
 object Ops:
-  import scala.compiletime.ops.int.*
   import scala.compiletime.ops.boolean.*
+  import scala.compiletime.ops.int.*
 
   val conjunction: true && true = true
   val multiplication: 3 * 5 = 15
@@ -90,13 +92,14 @@ object Ops:
   val concat: "a" + "b" = "ab"
   val addition: 1 + 1 = 2
 
-  import scala.compiletime.summonFrom
   import scala.collection.immutable.{HashSet, TreeSet}
+  import scala.compiletime.summonFrom
 
   inline def setFor[T]: Set[T] = summonFrom {
     case ord: Ordering[T] => new TreeSet[T]()(using ord)
     case _                => new HashSet[T]
   }
 
-  val x: (1, 3) = (1, 3)
-  val y: scala.compiletime.Widen[x.type] = x
+// RC1ではあったがRC2では消滅した
+//  val x: (1, 3) = (1, 3)
+//  val y: scala.compiletime.ops.Widen[x.type] = x
