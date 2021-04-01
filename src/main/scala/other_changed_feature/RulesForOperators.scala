@@ -1,4 +1,4 @@
-package other_new_feature
+package other_changed_feature
 
 object RulesForOperators:
   import scala.annotation.targetName

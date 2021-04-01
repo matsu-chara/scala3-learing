@@ -1,6 +1,6 @@
-package other_new_feature
+package other_changed_feature
 
-object WildCardImports:
+object Imports:
 
   object A:
     import scala.annotation.*
@@ -14,5 +14,6 @@ object WildCardImports:
     import A.*   // imports everything in A
 
   object D:
-    import A.{min as minimum, `*` as multiply}
+    import A.{`*`, min, minimum, multiply}
+
     import scala.annotation as ann

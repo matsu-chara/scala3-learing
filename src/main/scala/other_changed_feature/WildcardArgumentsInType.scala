@@ -1,4 +1,4 @@
-package other_new_feature
+package other_changed_feature
 
 object WildcardArgumentsInType:
   type Foo = List[?]
