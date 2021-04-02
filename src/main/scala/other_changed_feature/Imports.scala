@@ -14,6 +14,6 @@ object Imports:
     import A.*   // imports everything in A
 
   object D:
-    import A.{`*`, min, minimum, multiply}
+    import A.{`*`, min}
 
     import scala.annotation as ann
