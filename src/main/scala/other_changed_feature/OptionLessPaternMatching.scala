@@ -67,5 +67,5 @@ object OptionLessPaternMatching:
       Some((f.name, f.children))
   
   def foo(f: Foo) = f match
-    case Foo(name, ns : _*) =>
     case Foo(name, x, y, ns : _*) =>
+    case Foo(name, ns : _*) =>
