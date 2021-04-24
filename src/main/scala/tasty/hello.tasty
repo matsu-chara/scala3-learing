@@ -1,0 +1,5 @@
+package tasty {
+   final class hello() {
+    def main(args: scala.Array[java.lang.String]): scala.Unit = { /* compiled code */ }
+  }
+}
