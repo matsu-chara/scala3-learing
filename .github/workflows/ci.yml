@@ -17,4 +17,4 @@ jobs:
         java-version: "adopt@1.8"
     - uses: coursier/cache-action@v5
     - run: |
-        sbt scalafmtSbtCheck test:compile test
+        sbt scalafmtSbtCheck Test/compile test
