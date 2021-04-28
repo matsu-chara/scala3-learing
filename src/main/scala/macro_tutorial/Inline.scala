@@ -22,10 +22,27 @@ object Inline:
 //  }
 //  がよばれると
 //  val level   = logLevel
-//  def message = getMessage()
-//  
+//  def message = getMessage() <- by-nameパラメータだとdefになる
+//
 //  println(s"[$level]Computing $message")
-//  val res = computeSomething()
+//  val res = computeSomething() <- inlineパラメータなのでinline化される。（by-valueだと先頭でval定義されてしまうのでprintlnの前に実行されてしまう
 //  println(s"[$level]Result of $message: $res")
 //  res
 // に展開される
+
+  class Logger:
+    def log(x: Any): Unit = println(x)
+
+  class RefinedLogger extends Logger:
+    override def log(x: Any): Unit = println("Any: " + x)
+    def log(x: String): Unit = println("String: " + x)
+
+  inline def logged[T](logger: Logger, x: T): Unit =
+    logger.log(x)
+
+  // logged(new RefinedLogger, "foo") をinline化すると
+  // val logger = new RefinedLogger
+  // val x = "foo"
+  // logger.log(x)
+  // なのでlog(x: String)のほうが呼び出されそうだが、inline前後でsemanticsを変えては行けないというルールがあるので
+  // logged[T]から呼べるlogger.logであるlog(x: Any)の方が呼ばれる
