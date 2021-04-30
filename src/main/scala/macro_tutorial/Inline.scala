@@ -46,3 +46,26 @@ object Inline:
   // logger.log(x)
   // なのでlog(x: String)のほうが呼び出されそうだが、inline前後でsemanticsを変えては行けないというルールがあるので
   // logged[T]から呼べるlogger.logであるlog(x: Any)の方が呼ばれる
+
+  inline def power(x: Double, inline n: Int): Double =
+    inline if (n == 0) 1.0 // ifだけだとunrollingされない可能性がある。inline ifならコンパイル時に定数かどうか判断して確実にunrollingする（定数でない場合はコンパイルエラー）
+    else inline if (n % 2 == 1) x * power(x, n - 1)
+    else power(x * x, n / 2)
+
+  trait InlineLogger:
+    // inlineを強制できる（取ることもできるがオーバーロードの結果が変わる(refinedLoggerの例みたいに)
+    // InlineLoggerのlogを直接呼ぶことはできない（何をinline化すればいいか不明なため）
+    inline def log(inline x: Any): Unit
+
+  class PrintLogger extends InlineLogger:
+    inline def log(inline x: Any): Unit = println(x)
+
+  // 以下のようにinline化する前提なら呼べる
+  inline def logged(logger: InlineLogger, x: Any) =
+    logger.log(x)
+
+  // 返り値がIntやStringに静的に解決される（whiteboxマクロ的な使い方）
+  transparent inline def default(inline name: String): Any =
+    inline if name == "Int" then 0
+    else inline if name == "String" then ""
+    else ???
