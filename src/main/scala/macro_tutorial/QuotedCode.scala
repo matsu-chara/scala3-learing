@@ -72,3 +72,13 @@ object QuotedCode:
         '{ $ls.map(x => $g($f(x))) }
       case _ => x
     }
+
+  def mirrorFields[T: Type](using Quotes): Expr[List[String]] =
+    Type.of[T] match
+      case '[field *: fields] => '{  ${Expr(Type.show[field])} :: ${mirrorFields[fields]} }
+      case '[EmptyTuple] => '{Nil}
+      case _ => '{compiletime.error("Expected known tuple but got: " + ${Expr(Type.show[T])})}
+
+//    mirrorFields[EmptyTuple]         // Nil
+//    mirrorFields[(Int, String, Int)] // List("Int", "String", "Int")
+//    mirrorFields[Tuple]              // error: Expected known tuple but got: Tuple
