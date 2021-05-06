@@ -82,3 +82,21 @@ object QuotedCode:
 //    mirrorFields[EmptyTuple]         // Nil
 //    mirrorFields[(Int, String, Int)] // List("Int", "String", "Int")
 //    mirrorFields[Tuple]              // error: Expected known tuple but got: Tuple
+
+//    def $[T](x: Quotes ?=> Expr[T]): T = ... なので
+//    ${ body(using quotes) } // は
+//    ${ (using q1) => body(using q1) } // と等価
+
+  def reduce(using Quotes)(y: Expr[Int]): Expr[Int] =
+    Expr.betaReduce('{ ((x: Int) => x + x)($y) }) // returns '{ val x = y; x + x }
+
+  inline def setFor[T]: Set[T] =
+    ${ setForCode[T] }
+
+  // def setForCode[T: Type](ord: Expr[Ordering[T]])(using Quotes): Expr[Set[T]] としてもよい。
+  // 違いはNoneのケースを書けるかどうか（↑だとインスタンスがなければコンパイルエラーになる）
+  def setForCode[T: Type](using Quotes): Expr[Set[T]] =
+    import scala.collection.immutable.*
+    Expr.summon[Ordering[T]] match
+      case Some(ord) => '{ TreeSet.empty[T](using $ord) }
+      case _ => '{ HashSet.empty[T] }
