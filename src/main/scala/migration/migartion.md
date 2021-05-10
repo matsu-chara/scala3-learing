@@ -37,6 +37,11 @@ scala 3のマクロはscala 2.13と互換性がない
 - scala 2.13のマクロでコンパイルした成果物(jar)はscala3で使える
 - 逆も同じ
 
+## scalac
 
+-source:3.0-migrationをするとエラーが警告などになりマイグレーションしやすくなる
+
+-source:3.0-migrationと-rewriteをつけてコンパイルするとほとんどの警告が自動で修正される。（コンパイルが通る状態でないとリライトは発生しない）
+-source:3.0-migrationと-explainや-explain-typesをつけるとエラーの詳細がでる（マイグレーションオプションなくてもこの辺は使える）
 
 
