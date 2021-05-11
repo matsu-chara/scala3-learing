@@ -44,4 +44,17 @@ scala 3のマクロはscala 2.13と互換性がない
 -source:3.0-migrationと-rewriteをつけてコンパイルするとほとんどの警告が自動で修正される。（コンパイルが通る状態でないとリライトは発生しない）
 -source:3.0-migrationと-explainや-explain-typesをつけるとエラーの詳細がでる（マイグレーションオプションなくてもこの辺は使える）
 
+## migrate plugin
 
+- migrate-libs ライブラリアップデートの支援をしてくれる
+- migrate-scalacOptions scalacOptionをマイグレーションの支援をしてくれる
+- migrate-syntax 構文を修正してくれる
+
+```scala
+// project/plugins.sbt
+addSbtPlugin("ch.epfl.scala" % "sbt-scala3-migrate" % "0.4.0")
+// sbt-dotty is not required since sbt 1.5.0-M1
+addSbtPlugin("ch.epfl.lamp" % "sbt-dotty" % "0.5.3")
+```
+
+migrateできるのは１モジュールごと
