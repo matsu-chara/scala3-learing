@@ -58,3 +58,8 @@ addSbtPlugin("ch.epfl.lamp" % "sbt-dotty" % "0.5.3")
 ```
 
 migrateできるのは１モジュールごと
+
+### syntax
+
+`scalacOptions ++= Seq("-indent","-rewrite")` するとリライトされる
+
