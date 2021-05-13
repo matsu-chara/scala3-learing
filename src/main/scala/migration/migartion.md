@@ -63,3 +63,19 @@ migrateできるのは１モジュールごと
 
 `scalacOptions ++= Seq("-indent","-rewrite")` するとリライトされる
 
+### macro
+
+https://scalacenter.github.io/scala-3-migration-guide/docs/macros/macro-libraries.html で対応状況を確認できる
+
+
+kind-projectorは-Ykind-projector で移行できる
+
+- Type Lambdas
+- Polymorphic Functions
+- Kind Polymorphism
+
+あたりを使ってもよい
+
+### reflection
+
+scala-reflectはscala3にはない
