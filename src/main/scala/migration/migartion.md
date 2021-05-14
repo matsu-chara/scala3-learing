@@ -79,3 +79,36 @@ kind-projectorは-Ykind-projector で移行できる
 ### reflection
 
 scala-reflectはscala3にはない
+
+### sbt
+
+libraryの対応状況はscaladexのversion matrix見ると良い
+https://index.scala-lang.org/artifacts/fthomas/refined
+
+scalacOptionsはこんな感じで分岐
+
+```scala
+scalacOptions ++= {
+  Seq(
+    "-encoding",
+    "UTF-8",
+    "-feature",
+    "-language:implicitConversions",
+    // disabled during the migration
+    // "-Xfatal-warnings"
+  ) ++ 
+    (CrossVersion.partialVersion(scalaVersion.value) match {
+      case Some((3, _)) => Seq(
+        "-unchecked",
+        "-source:3.0-migration"
+      )
+      case _ => Seq(
+        "-deprecation",
+        "-Xfatal-warnings",
+        "-Wunused:imports,privates,locals",
+        "-Wvalue-discard"
+      )
+    })
+}
+```
+
