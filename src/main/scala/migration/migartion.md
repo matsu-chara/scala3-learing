@@ -112,3 +112,7 @@ scalacOptions ++= {
 }
 ```
 
+### kind projector
+
+`-Ykind-projector:underscores` をつけるとタイプラムダのプレースホルダが_になる。
+
