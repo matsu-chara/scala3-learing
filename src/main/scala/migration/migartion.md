@@ -116,3 +116,12 @@ scalacOptions ++= {
 
 `-Ykind-projector:underscores` をつけるとタイプラムダのプレースホルダが_になる。
 
+### macro
+
+マクロライブラリは１から実装し直す必要がある。
+
+マクロ部分は `src/main/scala-2` に移動させる。 `src/main/scala-3` に新しいマクロ実装を置く。
+対応関係はないので気合で実装する
+
+
+
